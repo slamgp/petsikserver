@@ -1,4 +1,4 @@
-package com.aep.model;
+package com.aep.model.user;
 
 public interface Role {
     public static String ADMIN = "admin";

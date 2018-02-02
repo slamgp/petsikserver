@@ -1,4 +1,4 @@
-package com.aep.model;
+package com.aep.model.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

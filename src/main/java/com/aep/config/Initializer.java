@@ -1,8 +1,10 @@
 package com.aep.config;
 
+import com.aep.config.security.SecurityConfig;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
@@ -22,6 +24,7 @@ public class Initializer implements WebApplicationInitializer {
 
         ServletRegistration.Dynamic servlet = servletContext.addServlet(DISPATCHER_SERVLET_NAME,
                 new DispatcherServlet(ctx));
+
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);
     }
