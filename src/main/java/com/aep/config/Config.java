@@ -3,9 +3,12 @@ package com.aep.config;
 import com.aep.config.security.SecurityConfig;
 import com.aep.model.user.Role;
 import com.aep.model.user.User;
-import com.aep.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
-@ComponentScan({"com.aep.controller", "com.aep.config"})
+@ComponentScan({"com.aep.controller", "com.aep.config", "com.aep.service"})
 @EnableWebMvc
 @Import({SecurityConfig.class})
 public class Config implements WebMvcConfigurer {
@@ -40,12 +43,9 @@ public class Config implements WebMvcConfigurer {
         Set<User> users = new HashSet<User>();
         Set<String> roles = new HashSet<String>();
         roles.add(Role.USER);
-        users.add(new User(1, "aaa@gmail.com", "111", roles));
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        users.add(new User(1, "aaa@gmail.com", encoder.encode("111"), roles));
         return users;
     }
 
-    @Bean
-    public UserService userServcie() {
-        return new UserService(usersDao());
-    }
 }
