@@ -3,12 +3,12 @@ package com.aep.config;
 import com.aep.config.security.SecurityConfig;
 import com.aep.model.user.Role;
 import com.aep.model.user.User;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,6 +28,10 @@ public class Config implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
+
     @Bean
     public InternalResourceViewResolver setupViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -44,8 +48,15 @@ public class Config implements WebMvcConfigurer {
         Set<String> roles = new HashSet<String>();
         roles.add(Role.USER);
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        users.add(new User(1, "aaa@gmail.com", encoder.encode("111"), roles));
+        users.add(new User(1, "111@gmail.com", encoder.encode("111"), roles));
+        users.add(new User(2, "222@gmail.com", encoder.encode("222"), roles));
         return users;
     }
 
+    @Bean
+    public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
+        BasicAuthenticationEntryPoint basicAuthenticationEntryPoint =  new BasicAuthenticationEntryPoint();
+        basicAuthenticationEntryPoint.setRealmName("petsik");
+        return basicAuthenticationEntryPoint;
+    }
 }
