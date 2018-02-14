@@ -1,25 +1,21 @@
 package com.aep.controller;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+//@CrossOrigin
 @RestController
-@RequestMapping("/rest")
-public class AuthorizationController {
-    @RequestMapping(method = RequestMethod.GET)
-    public String rest() {
+@RequestMapping("/hello")
+public class HelloController {
+    @RequestMapping(method = RequestMethod.POST)
+    public String rest(@RequestBody String jsonStr) {
+        JSONObject jsonObject = new JSONObject(jsonStr);
         Authentication outh = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
         JSONObject resultJson = new JSONObject();
-        resultJson.put("program", "petsikserver");
-        resultJson.put("version", "1.0");
-        resultJson.put("company", "aep");
-        resultJson.put("user_message", "hello " + outh.getName());
+        resultJson.put("user_message", "hello " + jsonObject.getString("name"));
         return    resultJson.toString();
     }
 }
