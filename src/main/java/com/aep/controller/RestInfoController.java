@@ -23,4 +23,16 @@ public class RestInfoController {
         resultJson.put("user_message", "hello " + outh.getName());
         return    resultJson.toString();
     }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String restPOST() {
+        Authentication outh = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("program", "petsikserver");
+        resultJson.put("version", "1.0");
+        resultJson.put("company", "aep");
+        resultJson.put("user_message", "hello " + outh.getName());
+        return    resultJson.toString();
+    }
 }
