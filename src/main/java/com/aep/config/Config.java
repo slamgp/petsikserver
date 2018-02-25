@@ -3,8 +3,8 @@ package com.aep.config;
 import com.aep.config.security.SecurityConfig;
 import com.aep.model.user.Role;
 import com.aep.model.user.User;
+import com.aep.service.validator.NewUserDataValidator;
 import org.springframework.context.annotation.*;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
@@ -43,15 +43,25 @@ public class Config implements WebMvcConfigurer {
     }
 
     @Bean
+    public NewUserDataValidator newUserDataValidator() {
+        return new NewUserDataValidator();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
     public Set<User> usersDao() {
         Set<User> users = new HashSet<User>();
         Set<String> roles = new HashSet<String>();
         roles.add(Role.USER);
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        users.add(new User(1, "111@gmail.com", encoder.encode("111"), roles));
-        users.add(new User(2, "222@gmail.com", encoder.encode("222"), roles));
+        users.add(new User(1, "111@gmail.com", passwordEncoder().encode("111"), roles));
+        users.add(new User(2, "222@gmail.com", passwordEncoder().encode("222"), roles));
         return users;
     }
+
 
     @Bean
     public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
