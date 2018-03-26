@@ -2,17 +2,11 @@ package com.aep.controller.secutity;
 
 import com.aep.model.exception.EmailIsBlockedException;
 import com.aep.model.exception.EmailIsBuseException;
-import com.aep.model.exception.UserDataNowValidException;
+import com.aep.model.exception.UserDataNotValidException;
 import com.aep.service.UserService;
 import com.aep.service.validator.NewUserDataValidator;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +22,7 @@ public class RegistrationController {
     public String authentication(@RequestBody String regString) {
         JSONObject result = new JSONObject();
         result.put("result", "true");
-        result.put("message", "Congratulations registration was successful!");
+        result.put("error_type", "");
 
         JSONObject jsonAuthData = new JSONObject(regString);
         if (jsonAuthData != null) {
@@ -38,19 +32,19 @@ public class RegistrationController {
                 if (newUserDataValidator.validate(email, password)) {
                     userService.registrateUser(email, password);
                 }
-            } catch (UserDataNowValidException e) {
+            } catch (UserDataNotValidException e) {
                 result.put("result", "false");
-                result.put("message", e.getMessage());
+                result.put("error_type", e.getClass().getSimpleName());
             } catch (EmailIsBlockedException e) {
                 result.put("result", "false");
-                result.put("message", "this is email was blocked!");
+                result.put("error_type", e.getClass().getSimpleName());
             } catch (EmailIsBuseException e) {
                 result.put("result", "false");
-                result.put("message", "the user with this name is already registered!");
+                result.put("error_type", e.getClass().getSimpleName());
             }
         } else {
             result.put("result", "false");
-            result.put("message", "System error!!");
+            result.put("error_type", "server error!!");
         }
 
 

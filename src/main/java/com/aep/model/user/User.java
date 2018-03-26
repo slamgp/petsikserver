@@ -12,6 +12,8 @@ public class User implements UserDetails {
     private long id;
     private String email;
     private String password;
+    private String name;
+    private String phone;
     private Set<String> roles;
 
     public User() {
@@ -82,5 +84,21 @@ public class User implements UserDetails {
 
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
